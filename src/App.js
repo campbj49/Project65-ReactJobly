@@ -4,7 +4,8 @@ import "./App.css";
 import Home from "./Home";
 import NavBar from "./NavBar";
 import { Route, Switch } from "react-router-dom";
-import Companies from "./Companies";
+import List from "./List";
+import Individual from "./Individual";
 
 function App() {
 
@@ -17,13 +18,13 @@ function App() {
             <Route exact path="/">
               <Home/>
             </Route>
-            <Route exact path="/companies">
-              <Companies/>
+            <Route exact path="/:base">
+              <List/>
             </Route>
-            {/* <Route path="/snacks/:id">
-              <Item items={snacks} cantFind="/snacks" />
+            <Route path="/:base/:handle">
+              <Individual cantFind="/:base" />
             </Route>
-            <Route exact path="/drinks">
+            {/* <Route exact path="/drinks">
               <Menu snacks={drinks} title="Drinks" root ="drinks" desc="The best drinks to go with your snack"/>
             </Route>
             <Route path="/drinks/:id">
