@@ -13,7 +13,10 @@ function NavBar() {
 
         <Nav className="ml-auto" navbar>
           <NavItem>
-            <NavLink to="/auth">Login</NavLink>
+            <NavLink to="/login">Login</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to="/signup">Sign Up</NavLink>
           </NavItem>
           <NavItem>
             <NavLink to="/companies">Company List</NavLink>
