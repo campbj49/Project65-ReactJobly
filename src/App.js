@@ -8,14 +8,23 @@ import List from "./List";
 import Individual from "./Individual";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm.js";
+import JoblyApi from "./api";
 
 function App() {
   const [formData, setFormData] = useState({});
+  const [token, setToken] = useState();
+  console.log(token);
 
   //function for manaing the submission login and registration form
-  function onSubmit(evt){
+  async function onSubmit(evt){
     evt.preventDefault();
     console.log(formData);
+    if(formData.email)
+      setToken(await JoblyApi.signup(formData));
+    else
+      setToken(await JoblyApi.login(formData.username, formData.password));
+    console.log(token);
+    
     setFormData({});
   }
 
