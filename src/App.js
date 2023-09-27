@@ -16,17 +16,32 @@ import Profile from "./Profile";
 function App() {
   const [formData, setFormData] = useState({});
   const [token, setToken] = useLocalStorage("token");
-  const [user, setUser] = useLocalStorage("user");
+  const [username, setUsername] = useLocalStorage("username");
+  const [user, setUser] = useState({});
   const [error, setError] = useState();
   const browserHistory = createBrowserHistory();
+
+  //keep user information up to date by loading the data fresh every time
+  useEffect(()=>{
+    async function updateUser(){
+      if(!(username === "undefined" || !username)){
+        JoblyApi.token = token;
+        await setUser(await JoblyApi.getUser(username))
+      }
+    }
+    updateUser();
+  },[])
 
   //function for manaing the submission login and registration form
   async function onSubmit(evt){
     evt.preventDefault();
     try{
-      if(!formData.username) setUser(await JoblyApi.updateUser(user.username,formData))
+      if(!formData.username) setUser(await JoblyApi.updateUser(username,formData))
       else{
         setToken();
+        await setUsername(formData.username);
+        console.log(username);
+        console.log(formData.username);
         if(formData.email)
           await setToken(await JoblyApi.signup(formData));
         else
@@ -55,7 +70,10 @@ function App() {
               <Home token={token}/>
             </Route>
             <Route path="/logout">
-              <Logout setToken={setToken} history={browserHistory} setUser={setUser}/>
+              <Logout setToken={setToken} 
+                      history={browserHistory} 
+                      setUser={setUser}
+                      setUsername={setUsername}/>
             </Route>
             <Route path="/login">
             <LoginForm onSubmit={onSubmit} 
@@ -72,10 +90,10 @@ function App() {
                     setFormData={setFormData}/>
             </Route>
             <Route exact path="/:base" token={token}>
-              <List/>
+              <List token={token}/>
             </Route>
             <Route path="/:base/:handle" token={token}>
-              <Individual cantFind="/:base" />
+              <Individual cantFind="/:base"  token={token} user={user}/>
             </Route>
             <Route>
               <p>Hmmm. I can't seem to find what you want.</p>
@@ -88,9 +106,10 @@ function App() {
 }
 
 //mini component for logging out
-function Logout({setToken, history, setUser}){
+function Logout({setToken, history, setUser, setUsername}){
   setToken();
   setUser();
+  setUsername();
   JoblyApi.token = undefined;
   history.push("/");
 }

@@ -4,7 +4,7 @@ import { Card, CardBody, CardTitle, CardText } from "reactstrap";
 import JoblyApi from "./api";
 import { async } from "q";
 
-function Individual({ cantFind, token }) {
+function Individual({ cantFind, token, user }) {
   const { base, handle } = useParams();
   const [individual, setIndividual] = useState([]);
 
@@ -26,12 +26,12 @@ function Individual({ cantFind, token }) {
 
 
   async function sendApp(e){
-    e.preventDefault()
-    console.log(e.target.id);
+    JoblyApi.apply(user.username, handle);
   }
 
   let apply;
-  if(base === "jobs") apply=(<button id={individual.id} onClick={sendApp}>Apply</button>)
+  if(base === "jobs" && user.applications && !user.applications.includes(parseInt(handle))) 
+    apply=(<button onClick={sendApp}>Apply</button>)
   return (
     <section>
       <Card>

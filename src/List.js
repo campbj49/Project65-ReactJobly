@@ -22,7 +22,7 @@ function List({token}) {
       await setList(await JoblyApi.getList(base));
     }
     getList();
-  }, []);
+  }, [base]);
 
   async function onSubmit(e){
     e.preventDefault();
@@ -33,6 +33,7 @@ function List({token}) {
     else if (base === "companies")
       await setList(await JoblyApi.getList(base, {name:filter}));
   }
+  console.log(token);
   //ensures the user is logged in
   if(!token) {
     return (<h1 style={{color:"orange"}}>Login to view</h1>)

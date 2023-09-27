@@ -5,7 +5,8 @@ import JoblyApi from "./api";
 
 function Home({token}) {
   let welcomeMessage = "You now have access to all pages";
-  if(token === "undefined" || !token) welcomeMessage= "Welcome to React Jobly, login or register to access all pages";
+  console.log(token);
+  if(token === "undefined" || token===undefined) welcomeMessage= "Welcome to React Jobly, login or register to access all pages";
   return (
     <section className="col-md-8">
       <Card>

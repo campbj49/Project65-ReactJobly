@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
  */
 
 function Profile({onSubmit, setFormData, user }){
+    console.log(user);
     //keeps input val props up to date
     const handleChange = evt => {
         const [ name, value ] = [evt.target.name, evt.target.value];
