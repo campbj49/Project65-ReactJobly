@@ -38,8 +38,8 @@ class JoblyApi {
 
   /** Get all of a list */
 
-  static async getList(type) {
-    let res = await this.request(type);
+  static async getList(type, data={}) {
+    let res = await this.request(type, data);
     return res[type];
   }
 

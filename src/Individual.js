@@ -16,7 +16,10 @@ function Individual({ cantFind }) {
       }
     }
     getIndividual();
-  }, [])
+  }, []);
+
+  let apply;
+  if(base === "jobs") apply=(<button>Apply</button>)
   return (
     <section>
       <Card>
@@ -27,6 +30,7 @@ function Individual({ cantFind }) {
           <CardText className="font-italic">{individual.description}</CardText>
         </CardBody>
       </Card>
+      {apply}
     </section>
   );
 }

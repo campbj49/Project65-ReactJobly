@@ -12,18 +12,35 @@ import {
 import JoblyApi from "./api";
 import "./List.css";
 
+/**List - shows list of either jobs or companies with filter capabilities */
+
 function List() {
   const [list, setList] = useState(["no"]);
   const { base } = useParams();
   useEffect(()=>{
     async function getList(){
       await setList(await JoblyApi.getList(base));
-      console.log(list);
     }
     getList();
-  }, [])
+  }, []);
+
+  async function onSubmit(e){
+    e.preventDefault();
+    let filter = e.target[0].value
+    if(filter === "") await setList(await JoblyApi.getList(base));
+    else if (base === "jobs")
+      await setList(await JoblyApi.getList(base, {title:filter}));
+    else if (base === "companies")
+      await setList(await JoblyApi.getList(base, {name:filter}));
+  }
+
   return (
     <section className="col-md-4">
+      <form onSubmit={onSubmit}>
+          <label htmlFor="search">Search</label>
+          <input type="text" name="search"></input><br/>
+          <button>Filter</button>
+      </form>
       <Card>
         <CardBody>
           <CardTitle className="font-weight-bold text-center">
