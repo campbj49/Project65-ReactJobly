@@ -25,6 +25,9 @@ function NavBar({error}) {
             <NavLink to="/logout">Logout</NavLink>
           </NavItem>
           <NavItem>
+            <NavLink to="/profile">Profile</NavLink>
+          </NavItem>
+          <NavItem>
             <NavLink to="/companies">Company List</NavLink>
           </NavItem>
           <NavItem>

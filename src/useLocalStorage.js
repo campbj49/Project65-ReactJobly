@@ -14,7 +14,7 @@ function useLocalStorage(key) {
   const [value, setValue] = useState(storedVal);
   const updateLocalStorage = (updatedVal) => {
     setValue(updatedVal);
-    localStorage.setItem(key, updatedVal);
+    localStorage.setItem(key, JSON.stringify(updatedVal));
   };
   
   // return piece of state AND a function to toggle it

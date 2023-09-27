@@ -57,6 +57,8 @@ class JoblyApi {
     return res.job;
   }
 
+  //manage authorization
+
   static async login(username, password){
     let res = await this.request("auth/token",{username:username, password:password}, "post" );
     return res.token;
@@ -72,6 +74,20 @@ class JoblyApi {
                                     email: formData.email
                                   },"post");  
     return res.token;
+  }
+
+  //retrieves user data
+  static async getUser(username){
+    let res = await this.request(`users/${username}`);
+    return res.user;
+  }
+
+  //updates user data
+
+  static async updateUser(username, data){
+    let res = await this.request(`users/${username}`, data, "patch");
+    console.log(res);
+    return res.user;
   }
 }
 

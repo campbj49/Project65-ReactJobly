@@ -11,26 +11,33 @@ import SignupForm from "./SignupForm.js";
 import JoblyApi from "./api";
 import { createBrowserHistory } from 'history';
 import useLocalStorage from "./useLocalStorage";
+import Profile from "./Profile";
 
 function App() {
   const [formData, setFormData] = useState({});
   const [token, setToken] = useLocalStorage("token");
+  const [user, setUser] = useLocalStorage("user");
   const [error, setError] = useState();
   const browserHistory = createBrowserHistory();
-  console.log(token);
 
   //function for manaing the submission login and registration form
   async function onSubmit(evt){
     evt.preventDefault();
     try{
-      if(formData.email)
-        setToken(await JoblyApi.signup(formData));
-      else
-        setToken(await JoblyApi.login(formData.username, formData.password));
-      console.log(token);
+      if(!formData.username) setUser(await JoblyApi.updateUser(user.username,formData))
+      else{
+        setToken();
+        if(formData.email)
+          await setToken(await JoblyApi.signup(formData));
+        else
+          await setToken(await JoblyApi.login(formData.username, formData.password));
+        JoblyApi.token = await JoblyApi.login(formData.username, formData.password);
+        setUser(await JoblyApi.getUser(formData.username))
+      }
       setError();
     }
-    catch{
+    catch(err){
+      console.log(err);
       setError("Invalid username or password")
     }
     
@@ -40,7 +47,7 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
+      <BrowserRouter history={browserHistory}>
         <NavBar error = {error}/>
         <main>
           <Switch>
@@ -48,11 +55,17 @@ function App() {
               <Home token={token}/>
             </Route>
             <Route path="/logout">
-              <Logout setToken={setToken} history={browserHistory}/>
+              <Logout setToken={setToken} history={browserHistory} setUser={setUser}/>
             </Route>
             <Route path="/login">
             <LoginForm onSubmit={onSubmit} 
                     setFormData={setFormData}/>
+            </Route>
+            <Route path="/profile">
+            <Profile onSubmit={onSubmit} 
+                    setFormData={setFormData}
+                    user = {user}
+                    formData= {formData}/>
             </Route>
             <Route path="/signup">
             <SignupForm onSubmit={onSubmit} 
@@ -75,8 +88,10 @@ function App() {
 }
 
 //mini component for logging out
-function Logout({setToken, history}){
+function Logout({setToken, history, setUser}){
   setToken();
+  setUser();
+  JoblyApi.token = undefined;
   history.push("/");
 }
 
