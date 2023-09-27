@@ -1,3 +1,15 @@
+# Getting the frontend and the backend working locally
+
+The backend of this app can be found at the https://github.com/campbj49/Project65-ReactJoblyBackend repository.
+
+Pull the repository, run server.sql, then run the following command:
+`$nodemon server.js` 
+
+In a seperate console run the following command:
+`$npm start`
+
+The site should function properly
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
