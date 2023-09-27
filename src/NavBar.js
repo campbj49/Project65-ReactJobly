@@ -2,8 +2,11 @@ import React from "react";
 import "./NavBar.css";
 import { NavLink } from "react-router-dom";
 import { Navbar, Nav, NavItem } from "reactstrap";
+import { compareLoose } from "semver";
 
-function NavBar() {
+function NavBar({error}) {
+  let erMsg;
+  if(error) erMsg = (<h1 style={{color:"orange"}}>{error}</h1>)
   return (
     <div>
       <Navbar expand="md">
@@ -19,6 +22,9 @@ function NavBar() {
             <NavLink to="/signup">Sign Up</NavLink>
           </NavItem>
           <NavItem>
+            <NavLink to="/logout">Logout</NavLink>
+          </NavItem>
+          <NavItem>
             <NavLink to="/companies">Company List</NavLink>
           </NavItem>
           <NavItem>
@@ -26,6 +32,7 @@ function NavBar() {
           </NavItem>
         </Nav>
       </Navbar>
+      {erMsg}
     </div>
   );
 }

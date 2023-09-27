@@ -14,7 +14,7 @@ import "./List.css";
 
 /**List - shows list of either jobs or companies with filter capabilities */
 
-function List() {
+function List({token}) {
   const [list, setList] = useState(["no"]);
   const { base } = useParams();
   useEffect(()=>{
@@ -32,6 +32,10 @@ function List() {
       await setList(await JoblyApi.getList(base, {title:filter}));
     else if (base === "companies")
       await setList(await JoblyApi.getList(base, {name:filter}));
+  }
+  //ensures the user is logged in
+  if(!token) {
+    return (<h1 style={{color:"orange"}}>Login to view</h1>)
   }
 
   return (

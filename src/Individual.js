@@ -3,7 +3,7 @@ import { Redirect, useParams } from "react-router-dom";
 import { Card, CardBody, CardTitle, CardText } from "reactstrap";
 import JoblyApi from "./api";
 
-function Individual({ cantFind }) {
+function Individual({ cantFind, token }) {
   const { base, handle } = useParams();
   const [individual, setIndividual] = useState([])
 
@@ -17,6 +17,11 @@ function Individual({ cantFind }) {
     }
     getIndividual();
   }, []);
+  
+  //ensures the user is logged in
+  if(!token) {
+    return (<h1 style={{color:"orange"}}>Login to view</h1>)
+  }
 
   let apply;
   if(base === "jobs") apply=(<button>Apply</button>)

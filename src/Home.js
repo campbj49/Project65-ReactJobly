@@ -3,14 +3,16 @@ import React, {useEffect, useState} from "react";
 import { Card, CardBody, CardTitle } from "reactstrap";
 import JoblyApi from "./api";
 
-function Home() {
+function Home({token}) {
+  let welcomeMessage = "Welcome to React Jobly, login or register to access all pages";
+  if(token!= "undefined") welcomeMessage= "You now have access to all pages";
   return (
     <section className="col-md-8">
       <Card>
         <CardBody className="text-center">
           <CardTitle>
             <h3 className="font-weight-bold">
-              Welcome to React Jobly
+              {welcomeMessage}
             </h3>
           </CardTitle>
         </CardBody>

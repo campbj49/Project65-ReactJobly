@@ -9,33 +9,46 @@ import Individual from "./Individual";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm.js";
 import JoblyApi from "./api";
+import { createBrowserHistory } from 'history';
+import useLocalStorage from "./useLocalStorage";
 
 function App() {
   const [formData, setFormData] = useState({});
-  const [token, setToken] = useState();
+  const [token, setToken] = useLocalStorage("token");
+  const [error, setError] = useState();
+  const browserHistory = createBrowserHistory();
   console.log(token);
 
   //function for manaing the submission login and registration form
   async function onSubmit(evt){
     evt.preventDefault();
-    console.log(formData);
-    if(formData.email)
-      setToken(await JoblyApi.signup(formData));
-    else
-      setToken(await JoblyApi.login(formData.username, formData.password));
-    console.log(token);
+    try{
+      if(formData.email)
+        setToken(await JoblyApi.signup(formData));
+      else
+        setToken(await JoblyApi.login(formData.username, formData.password));
+      console.log(token);
+      setError();
+    }
+    catch{
+      setError("Invalid username or password")
+    }
     
     setFormData({});
+    browserHistory.push(`/`);
   }
 
   return (
     <div className="App">
       <BrowserRouter>
-        <NavBar />
+        <NavBar error = {error}/>
         <main>
           <Switch>
             <Route exact path="/">
-              <Home/>
+              <Home token={token}/>
+            </Route>
+            <Route path="/logout">
+              <Logout setToken={setToken} history={browserHistory}/>
             </Route>
             <Route path="/login">
             <LoginForm onSubmit={onSubmit} 
@@ -45,10 +58,10 @@ function App() {
             <SignupForm onSubmit={onSubmit} 
                     setFormData={setFormData}/>
             </Route>
-            <Route exact path="/:base">
+            <Route exact path="/:base" token={token}>
               <List/>
             </Route>
-            <Route path="/:base/:handle">
+            <Route path="/:base/:handle" token={token}>
               <Individual cantFind="/:base" />
             </Route>
             <Route>
@@ -59,6 +72,12 @@ function App() {
       </BrowserRouter>
     </div>
   );
+}
+
+//mini component for logging out
+function Logout({setToken, history}){
+  setToken();
+  history.push("/");
 }
 
 export default App;
